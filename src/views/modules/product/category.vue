@@ -76,7 +76,7 @@ props: {},
       menus: [],
       defaultProps: {
         label: "name",
-        children: "childrens"
+        children: "children"
       }
     }
 },
