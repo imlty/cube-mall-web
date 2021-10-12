@@ -223,15 +223,17 @@ methods: {
 
     //封装要删除的id
     let ids = [];
+    let names = [];
     //通过eltree菜单 获取
     let checkedNodes = this.$refs.menuTree.getCheckedNodes();
     console.log("被选中的元素", checkedNodes);
     for (let index = 0; index < checkedNodes.length; index++) {
       //把选中的CheckBox的id值 添加到ids集合中
       ids.push( checkedNodes[index].id );
+      names.push( checkedNodes[index].name )
     }
 
-    this.$confirm(`是否批量删除[${ids}]菜单?`, '提示', {
+    this.$confirm(`是否批量删除[${names}]菜单?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
