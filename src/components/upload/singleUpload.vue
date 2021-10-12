@@ -1,7 +1,7 @@
 <template> 
   <div>
     <el-upload
-      action="https://cubemall-product.oss-cn-beijing.aliyuncs.com"
+      action="https://cubemall-imlty.oss-cn-chengdu.aliyuncs.com"
       :data="dataObj"
       list-type="picture"
       :multiple="false" :show-file-list="showFileList"
