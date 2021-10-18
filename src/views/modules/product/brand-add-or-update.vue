@@ -55,13 +55,32 @@ export default {
         name: [
           { required: true, message: "品牌名称不能为空", trigger: "blur" },
         ],
-        image: [
-          { required: true, message: "品牌图片地址不能为空", trigger: "blur" },
-        ],
+        image: [],
         letter: [
-          { required: true, message: "品牌的首字母不能为空", trigger: "blur" },
+          { 
+            validator:(rule,value,callback)=>{
+              if (value == ""){
+                callback(new Error("首字母必须填写！"))
+              }else if(!/^[a-zA-Z]$/.test(value)){
+                callback(new Error("首字母必须是a-z 或 A-Z"))
+              }else{
+                callback()
+              }
+            },
+            trigger:"blur",
+           },
         ],
-        seq: [{ required: true, message: "排序不能为空", trigger: "blur" }],
+        seq: [{ 
+            validator:(rule,value,callback)=>{
+              if(value == ""){
+                callback(new Error("排序字段必须填写！"))
+              }else if(!/^[0-9]+$/.test(value)){
+                callback("排序应该阿拉伯数字！")
+              }else{
+                callback()
+              }
+            },
+            trigger: "blur" }],
       },
     };
   },
@@ -90,6 +109,7 @@ export default {
     // 表单提交
     dataFormSubmit() {
       this.$refs["dataForm"].validate((valid) => {
+        console.log(this.dataForm);
         if (valid) {
           this.$http({
             url: this.$http.adornUrl(
