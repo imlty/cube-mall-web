@@ -1,157 +1,153 @@
 <template>
-  <div>
-    <el-row>
-      <el-col :span="6"><category @tree-node-click="treeNodeClick"></category></el-col>
-      <el-col :span="18">
-        <div class="mod-config">
-          <el-form
-            :inline="true"
-            :model="dataForm"
-            @keyup.enter.native="getDataList()"
+  <el-row :gutter="20">
+    <el-col :span="6">
+      <category @tree-node-click="treenodeclick"></category>
+    </el-col>
+    <el-col :span="18">
+      <div class="mod-config">
+        <el-form
+          :inline="true"
+          :model="dataForm"
+          @keyup.enter.native="getDataList()"
+        >
+          <el-form-item>
+            <el-input
+              v-model="dataForm.key"
+              placeholder="参数名"
+              clearable
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="getDataList()">查询</el-button>
+            <el-button type="success" @click="getAllDataList()"
+              >查询全部</el-button
+            >
+            <el-button type="primary" @click="addOrUpdateHandle()"
+              >新增</el-button
+            >
+            <el-button
+              type="danger"
+              @click="deleteHandle()"
+              :disabled="dataListSelections.length <= 0"
+              >批量删除</el-button
+            >
+          </el-form-item>
+        </el-form>
+        <el-table
+          :data="dataList"
+          border
+          v-loading="dataListLoading"
+          @selection-change="selectionChangeHandle"
+          style="width: 100%"
+        >
+          <el-table-column
+            type="selection"
+            header-align="center"
+            align="center"
+            width="50"
+          ></el-table-column>
+          <el-table-column
+            prop="id"
+            header-align="center"
+            align="center"
+            label="分组id"
+          ></el-table-column>
+          <el-table-column
+            prop="name"
+            header-align="center"
+            align="center"
+            label="组名"
+          ></el-table-column>
+          <el-table-column
+            prop="sort"
+            header-align="center"
+            align="center"
+            label="排序"
+          ></el-table-column>
+          <el-table-column
+            prop="descript"
+            header-align="center"
+            align="center"
+            label="描述"
+          ></el-table-column>
+          <el-table-column
+            prop="icon"
+            header-align="center"
+            align="center"
+            label="组图标"
+          ></el-table-column>
+          <el-table-column
+            prop="categoryId"
+            header-align="center"
+            align="center"
+            label="所属分类id"
+          ></el-table-column>
+          <el-table-column
+            fixed="right"
+            header-align="center"
+            align="center"
+            width="150"
+            label="操作"
           >
-            <el-form-item>
-              <el-input
-                v-model="dataForm.key"
-                placeholder="参数名"
-                clearable
-              ></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button @click="getDataList()">查询</el-button>
-              <el-button type="success" @click="getAllDataList()"
-                >查询全部</el-button
+            <template slot-scope="scope">
+              <el-button
+                type="text"
+                size="small"
+                @click="relationHandle(scope.row.id)"
+                >关联</el-button
               >
               <el-button
-                v-if="isAuth('product:attrgroup:save')"
-                type="primary"
-                @click="addOrUpdateHandle()"
-                >新增</el-button
+                type="text"
+                size="small"
+                @click="addOrUpdateHandle(scope.row.id)"
+                >修改</el-button
               >
               <el-button
-                v-if="isAuth('product:attrgroup:delete')"
-                type="danger"
-                @click="deleteHandle()"
-                :disabled="dataListSelections.length <= 0"
-                >批量删除</el-button
+                type="text"
+                size="small"
+                @click="deleteHandle(scope.row.id)"
+                >删除</el-button
               >
-            </el-form-item>
-          </el-form>
-          <el-table
-            :data="dataList"
-            border
-            v-loading="dataListLoading"
-            @selection-change="selectionChangeHandle"
-            style="width: 100%"
-          >
-            <el-table-column
-              type="selection"
-              header-align="center"
-              align="center"
-              width="50"
-            >
-            </el-table-column>
-            <el-table-column
-              prop="id"
-              header-align="center"
-              align="center"
-              label="自增ID"
-            >
-            </el-table-column>
-            <el-table-column
-              prop="name"
-              header-align="center"
-              align="center"
-              label="名称"
-            >
-            </el-table-column>
-            <el-table-column
-              prop="sort"
-              header-align="center"
-              align="center"
-              label="排序"
-            >
-            </el-table-column>
-            <el-table-column
-              prop="descript"
-              header-align="center"
-              align="center"
-              label="描述"
-            >
-            </el-table-column>
-            <el-table-column
-              prop="icon"
-              header-align="center"
-              align="center"
-              label="图表"
-            >
-            </el-table-column>
-            <el-table-column
-              prop="categoryId"
-              header-align="center"
-              align="center"
-              label="分类ID"
-            >
-            </el-table-column>
-            <el-table-column
-              fixed="right"
-              header-align="center"
-              align="center"
-              width="150"
-              label="操作"
-            >
-              <template slot-scope="scope">
-                <el-button
-                  type="text"
-                  size="small"
-                  @click="addOrUpdateHandle(scope.row.id)"
-                  >修改</el-button
-                >
-                <el-button
-                  type="text"
-                  size="small"
-                  @click="deleteHandle(scope.row.id)"
-                  >删除</el-button
-                >
-              </template>
-            </el-table-column>
-          </el-table>
-          <el-pagination
-            @size-change="sizeChangeHandle"
-            @current-change="currentChangeHandle"
-            :current-page="pageIndex"
-            :page-sizes="[10, 20, 50, 100]"
-            :page-size="pageSize"
-            :total="totalPage"
-            layout="total, sizes, prev, pager, next, jumper"
-          >
-          </el-pagination>
-          <!-- 弹窗, 新增 / 修改 -->
-          <add-or-update
-            v-if="addOrUpdateVisible"
-            ref="addOrUpdate"
-            @refreshDataList="getDataList"
-          ></add-or-update>
-        </div>
-      </el-col>
-    </el-row>
-  </div>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          @size-change="sizeChangeHandle"
+          @current-change="currentChangeHandle"
+          :current-page="pageIndex"
+          :page-sizes="[10, 20, 50, 100]"
+          :page-size="pageSize"
+          :total="totalPage"
+          layout="total, sizes, prev, pager, next, jumper"
+        ></el-pagination>
+        <!-- 弹窗, 新增 / 修改 -->
+        <add-or-update
+          v-if="addOrUpdateVisible"
+          ref="addOrUpdate"
+          @refreshDataList="getDataList"
+        ></add-or-update>
+
+        <!-- 修改关联关系 -->
+        <relation-update
+          v-if="relationVisible"
+          ref="relationUpdate"
+          @refreshData="getDataList"
+        ></relation-update>
+      </div>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
-//这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
-//例如：import 《组件名称》 from '《组件路径》';
 import Category from "../common/category";
-import AddOrUpdate from './attrgroup-add-or-update';
+import AddOrUpdate from "./attrgroup-add-or-update";
+import RelationUpdate from "./attr-group-relation";
 export default {
-  //import引入的组件需要注入到对象中才能使用
-  components: {
-    Category,
-    AddOrUpdate
-  },
+  components: { Category, AddOrUpdate, RelationUpdate },
   props: {},
   data() {
-    //这里存放数据
     return {
+      categoryId: 0,
       dataForm: {
         key: "",
       },
@@ -162,29 +158,23 @@ export default {
       dataListLoading: false,
       dataListSelections: [],
       addOrUpdateVisible: false,
-      categoryId: 0,
+      relationVisible: false,
     };
   },
-  //计算属性 类似于data概念
-  computed: {},
-  //监控data中的数据变化
-  watch: {},
-  //方法集合
+  activated() {
+    this.getDataList();
+  },
   methods: {
-    //感知子组件给父组件发送的事件
-    treeNodeClick(data, node, component) {
-      console.log("刚才被点击的菜单id:", data.id);
-      //判断当前点击的菜单是否为 3级节点
-      if (node.level == 3) {
-        this.categoryId = data.id;
-        this.getDataList();
-      }
+    //处理分组与属性的关联
+    relationHandle(groupId) {
+      this.relationVisible = true;
+      this.$nextTick(() => {
+        this.$refs.relationUpdate.init(groupId);
+      });
     },
-    //查询全部属性分组
     getAllDataList() {
       this.categoryId = 0;
       this.dataForm.key = "";
-      // 获取数据列表
       this.getDataList();
     },
     // 获取数据列表
@@ -224,6 +214,13 @@ export default {
     selectionChangeHandle(val) {
       this.dataListSelections = val;
     },
+    treenodeclick(data, node, component) {
+      console.log("treenodeclick");
+      if (node.level == 3) {
+        this.categoryId = data.id; //设置分类ID 为当前节点ID
+        this.getDataList();
+      }
+    },
     // 新增 / 修改
     addOrUpdateHandle(id) {
       this.addOrUpdateVisible = true;
@@ -236,7 +233,7 @@ export default {
       var ids = id
         ? [id]
         : this.dataListSelections.map((item) => {
-            return item.id;
+            return item.attrGroupId;
           });
       this.$confirm(
         `确定对[id=${ids.join(",")}]进行[${id ? "删除" : "批量删除"}]操作?`,
@@ -268,20 +265,7 @@ export default {
       });
     },
   },
-  //生命周期 - 创建完成（可以访问当前this实例）
-  created() {},
-  //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
-  beforeCreate() {}, //生命周期 - 创建之前
-  beforeMount() {}, //生命周期 - 挂载之前
-  beforeUpdate() {}, //生命周期 - 更新之前
-  updated() {}, //生命周期 - 更新之后
-  beforeDestroy() {}, //生命周期 - 销毁之前
-  destroyed() {}, //生命周期 - 销毁完成
-  activated() {
-    this.getDataList()
-  }, //如果页面有keep-alive缓存功能，这个函数会触发
 };
 </script>
-<style scoped>
+<style scoped>
 </style>
