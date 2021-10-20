@@ -62,6 +62,7 @@ export default {
         method: "get"
       }).then(({ data }) => {
         this.categorys = data.data;
+        console.log(this.categorys)
       });
     }
   },
