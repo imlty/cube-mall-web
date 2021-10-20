@@ -1,5 +1,5 @@
 <template>
-<!--
+  <!--
 使用说明：
 1）、引入category-cascader.vue
 2）、语法：<category-cascader :catelogPath.sync="categoryPath"></category-cascader>
@@ -17,8 +17,7 @@
 </template>
 
 <script>
-
-import PubSub from "pubsub-js"
+import PubSub from "pubsub-js";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
@@ -26,10 +25,10 @@ export default {
   props: {
     categoryPath: {
       type: Array,
-      default(){
+      default() {
         return [];
-      }
-    }
+      },
+    },
   },
   data() {
     //这里存放数据
@@ -37,39 +36,38 @@ export default {
       setting: {
         value: "id",
         label: "name",
-        children: "childrens"
+        children: "children",
       },
       categorys: [],
-      paths: this.categoryPath
+      paths: this.categoryPath,
     };
   },
-  watch:{
-    categoryPath(v){
+  watch: {
+    categoryPath(v) {
       this.paths = this.categoryPath;
     },
-    paths(v){
-      this.$emit("update:categoryPath",v);
+    paths(v) {
+      this.$emit("update:categoryPath", v);
       //还可以使用pubsub-js进行传值
       // this.PubSub.publish("catPath",v);
-        PubSub.publish("categoryPath",v);
-    }
+      PubSub.publish("categoryPath", v);
+    },
   },
   //方法集合
   methods: {
     getCategorys() {
       this.$http({
         url: this.$http.adornUrl("/product/category/list/tree"),
-        method: "get"
+        method: "get",
       }).then(({ data }) => {
         this.categorys = data.data;
-        console.log(this.categorys)
       });
-    }
+    },
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
     this.getCategorys();
-  }
+  },
 };
 </script>
 <style scoped>
