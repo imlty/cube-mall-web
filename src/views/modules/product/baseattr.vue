@@ -154,7 +154,7 @@ export default {
     //感知树节点被点击
     treenodeclick(data, node, component) {
       if (node.level == 3) {
-        this.catId = data.catId;
+        this.catId = data.id;
         this.getDataList(); //重新查询
       }
     },
