@@ -165,6 +165,7 @@ export default {
   watch: {
     categoryPath(path) {
       //监听到路径变化需要查出这个三级分类的分组信息
+      console.log("路径变了", path);
       this.attrGroups = [];
       this.dataForm.attrGroupId = "";
       this.dataForm.categoryId = path[path.length - 1];
@@ -188,7 +189,6 @@ export default {
         this.$message.error("请选择正确的分类");
         this.dataForm.categoryId = "";
       }
-      console.log( this.dataForm,path);
     }
   },
   components: { CategoryCascader },

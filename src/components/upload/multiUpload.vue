@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-upload
-      action="https://cube-goods.oss-cn-beijing.aliyuncs.com"
+      action="https://cubemall-imlty.oss-cn-chengdu.aliyuncs.com"
       :data="dataObj"
       :list-type="listType"
       :file-list="fileList"
@@ -89,7 +89,7 @@ export default {
       return new Promise((resolve, reject) => {
         policy()
           .then(response => {
-            console.log("这是什么${filename}");
+            console.log(`这是什么${response}`);
             _self.dataObj.policy = response.data.policy;
             _self.dataObj.signature = response.data.signature;
             _self.dataObj.ossaccessKeyId = response.data.accessid;

@@ -133,7 +133,7 @@ export default {
   },
   data() {
     return {
-      catId: 0,
+      id: 0,
       type: 1,
       dataForm: {
         key: ""
@@ -154,13 +154,12 @@ export default {
     //感知树节点被点击
     treenodeclick(data, node, component) {
       if (node.level == 3) {
-        this.catId = data.id;
+        this.id = data.id;
         this.getDataList(); //重新查询
       }
     },
     getAllDataList(){
-      this.dataForm.key = "";
-      this.catId = 0;
+      this.id = 0;
       this.getDataList();
     },
     // 获取数据列表
@@ -168,7 +167,7 @@ export default {
       this.dataListLoading = true;
       let type = this.attrtype == 0 ? "sale" : "base";
       this.$http({
-        url: this.$http.adornUrl(`/product/attr/${type}/list/${this.catId}`),
+        url: this.$http.adornUrl(`/product/attr/${type}/list/${this.id}`),
         method: "get",
         params: this.$http.adornParams({
           page: this.pageIndex,
