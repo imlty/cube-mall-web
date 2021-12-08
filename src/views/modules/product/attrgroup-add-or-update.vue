@@ -26,7 +26,9 @@
       </el-form-item>
       <el-form-item label="所属分类" prop="categoryId">
         <!-- <el-input v-model="dataForm.catelogId" placeholder="所属分类id"></el-input> -->
-        <category-cascader :categoryPath.sync="categoryPath"></category-cascader>
+        <category-cascader
+          :categoryPath.sync="categoryPath"
+        ></category-cascader>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
