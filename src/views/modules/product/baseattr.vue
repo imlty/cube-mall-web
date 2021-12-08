@@ -159,6 +159,7 @@ export default {
       }
     },
     getAllDataList(){
+      this.dataForm.key = "";
       this.catId = 0;
       this.getDataList();
     },
