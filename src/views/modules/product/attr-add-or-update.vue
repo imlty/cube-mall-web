@@ -188,6 +188,7 @@ export default {
         this.$message.error("请选择正确的分类");
         this.dataForm.categoryId = "";
       }
+      console.log( this.dataForm,path);
     }
   },
   components: { CategoryCascader },
